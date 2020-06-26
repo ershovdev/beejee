@@ -10,7 +10,7 @@ class TaskRepository extends EntityRepository
     public function getPaginator($offset, string $column, string $order)
     {
         try {
-            $dql = "SELECT p FROM \Src\Task p ORDER BY p.{$column} {$order}";
+            $dql = "SELECT p FROM \App\Db\Task p ORDER BY p.{$column} {$order}";
             $query = $this->getEntityManager()
                 ->createQuery($dql)
                 ->setMaxResults(3)

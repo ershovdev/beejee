@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Doctrine\ORM\EntityManager;
+use App\Db\Task as DbTask;
 
 class Task
 {
@@ -13,14 +14,14 @@ class Task
     {
         $this->entityManager = $entityManager;
         if ($id)
-            $this->task = $this->entityManager->getRepository('\Src\Task')->findOneBy(array('id' => $id));
+            $this->task = $this->entityManager->getRepository('\App\Db\Task')->findOneBy(array('id' => $id));
     }
 
     public function store(array $data)
     {
-        $task = new \Src\Task();
+        $task = new DbTask();
 
-        $user = $this->entityManager->find('\Src\User', 1);
+        $user = $this->entityManager->find('\App\Db\User', 1);
 
         $task->setUser($user);
         $task->setEmail($data['email']);
@@ -47,7 +48,7 @@ class Task
 
     public function getPaginator(int $page, string $column, string $order)
     {
-        return $this->entityManager->getRepository('\Src\Task')
+        return $this->entityManager->getRepository('\App\Db\Task')
             ->getPaginator($page, $column, $order);
     }
 

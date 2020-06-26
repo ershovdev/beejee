@@ -14,8 +14,8 @@ use Phroute\Phroute\Dispatcher;
 use Phroute\Phroute\Exception\HttpMethodNotAllowedException;
 use Phroute\Phroute\Exception\HttpRouteNotFoundException;
 use Phroute\Phroute\RouteCollector;
-use Src\Task;
-use Src\User;
+use App\Db\Task;
+use App\Db\User;
 
 class Router
 {

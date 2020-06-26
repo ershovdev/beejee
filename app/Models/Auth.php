@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Core\Helpers;
 use Doctrine\ORM\EntityManager;
-use Src\User;
+use App\Db\User;
 
 class Auth
 {
@@ -36,7 +36,7 @@ class Auth
         if ($this->checkLoginAndPassword($login, $password)) {
             $hash = md5($this->generateCode(10));
 
-            $user = $this->entityManager->find('\Src\User', 1);
+            $user = $this->entityManager->find('\App\Db\User', 1);
             $user->setHash($hash);
 
             $this->entityManager->persist($user);

@@ -19,8 +19,8 @@
             "App\\Controllers\\" : "app/Controllers",
             "App\\Repositories\\" : "app/Repositories",
             "App\\Validators\\" : "app/Validators",
-            "App\\Models\\" : "app/Models",
-            "Src\\" : "src/"
+            "App\\Db\\" : "app/Db",
+            "App\\Models\\" : "app/Models"
         }
     }
 }

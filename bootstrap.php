@@ -14,7 +14,7 @@ $cache = null;
 $useSimpleAnnotationReader = false;
 
 $config = Setup::createAnnotationMetadataConfiguration(
-    array(__DIR__ . "/src"),
+    array(__DIR__ . "/app/Db"),
     $isDevMode,
     $proxyDir,
     $cache,
