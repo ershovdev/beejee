@@ -110,9 +110,11 @@ class Router
         try {
             $this->response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $this->processInput($_SERVER['REQUEST_URI']));
         } catch (HttpRouteNotFoundException $e) {
-            $this->response = '404!';
+            View::show('404');
+            die();
         } catch (HttpMethodNotAllowedException $e) {
-            $this->response = 'This method is not allowed here!';
+            View::show('badmethod');
+            die();
         }
 
         echo $this->response;
