@@ -33,6 +33,10 @@ class Router
         $authController = new AuthController($this->entityManager);
         $taskController = new TaskController($this->entityManager);
 
+        $this->router->get('/', function () {
+            Helpers::redirect('/tasks');
+        });
+
         $this->router->get('/signIn', function () use ($authController) {
             $authController->show();
         });
