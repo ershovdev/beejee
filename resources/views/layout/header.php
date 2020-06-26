@@ -12,7 +12,7 @@
     <!-- Some Font Awesome Icons -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <title>Hello, world!</title>
+    <title>Tasker!</title>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -32,7 +32,7 @@
             <ul class="navbar-nav">
                 <?php if (\App\Models\Auth::isLoggedIn()): ?>
                     <li class="nav-item active">
-                        <a class="nav-link">Привет, Admin!</a>
+                        <a class="nav-link">Hi, Admin!</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="/logout">Logout</a>
