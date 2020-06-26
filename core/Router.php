@@ -4,27 +4,16 @@ namespace Core;
 
 use App\Controllers\AuthController;
 use App\Controllers\TaskController;
-use App\Models\Auth;
-use Doctrine\ORM\Decorator\EntityManagerDecorator;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Phroute\Phroute\Dispatcher;
 use Phroute\Phroute\Exception\HttpMethodNotAllowedException;
 use Phroute\Phroute\Exception\HttpRouteNotFoundException;
 use Phroute\Phroute\RouteCollector;
-use App\Db\Task;
-use App\Db\User;
 
 class Router
 {
     private $router;
-
     private $routeData;
-
-    private $response;
-
     private $entityManager;
 
     public function __construct(EntityManager $entityManager)
@@ -37,8 +26,6 @@ class Router
     {
         $this->collect();
         $this->dispatch();
-
-        echo $this->response;
     }
 
     public function collect()
@@ -82,24 +69,6 @@ class Router
             $taskController->update($id);
         });
 
-        $this->router->get('/users/add', function () {
-            $user = new User();
-            $auth = new Auth($this->entityManager);
-            $user->setLogin('admin');
-            $user->setPassword('123');
-            $user->setEmail('123@123.ru');
-            $user->setCreatedAt(new \DateTime());
-            $user->setHash($auth->generateCode(10));
-
-            try {
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
-            } catch (\Exception $e) {
-                echo $e;
-            }
-            echo "Created User with ID " . $user->getId() . "\n";
-        });
-
         $this->routeData = $this->router->getData();
     }
 
@@ -108,7 +77,7 @@ class Router
         $dispatcher = new Dispatcher($this->routeData);
 
         try {
-            $this->response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $this->processInput($_SERVER['REQUEST_URI']));
+            $response = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $this->processInput($_SERVER['REQUEST_URI']));
         } catch (HttpRouteNotFoundException $e) {
             View::show('404');
             die();
@@ -117,7 +86,7 @@ class Router
             die();
         }
 
-        echo $this->response;
+        echo $response;
         die();
     }
 
