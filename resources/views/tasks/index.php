@@ -62,32 +62,5 @@
         </tbody>
     </table>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li class="page-item <?php echo (!$_GET['page'] || $_GET['page'] === '1') ? 'disabled' : '' ?>">
-                <a class="page-link"
-                   href="/tasks?page=<?php echo $_GET['page'] - 1 ?>&column=<?php echo $column ?>&order=<?php echo $_GET['order'] ?? 'ASC'; ?>">
-                    Prev
-                </a>
-            </li>
-
-            <?php for($i = 0; $i < $numberOfTasks / 3; $i++): ?>
-                <?php $active = ($_GET['page'] == $i + 1) || (!$_GET['page'] && $i === 0); ?>
-                <li class="page-item <?php echo $active ? 'active' : '' ?>">
-                    <a class="page-link"
-                       href="/tasks?page=<?php echo $i + 1 ?>&column=<?php echo $column ?>&order=<?php echo $_GET['order'] ?? 'ASC'; ?>">
-                        <?php echo $i + 1 ?>
-                    </a>
-                </li>
-            <?php endfor; ?>
-
-            <?php $nextDisabled = !$_GET['page'] || ($_GET['page'] * 3 >= $numberOfTasks)  ?>
-            <li class="page-item <?php echo $nextDisabled ? 'disabled' : '' ?>">
-                <a class="page-link"
-                   href="/tasks?page=<?php echo !$_GET['page'] ? 2 : $_GET['page'] + 1 ?>&column=<?php echo $column ?>&order=<?php echo $_GET['order'] ?? 'ASC'; ?>">
-                    Next
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <?php require_once 'parts/pagination.php'?>
 </div>

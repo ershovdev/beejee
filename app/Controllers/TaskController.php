@@ -7,6 +7,7 @@ use App\Validators\TaskEditValidator;
 use App\Validators\TaskIndexParametersValidator;
 use App\Validators\TaskStoreValidator;
 use Core\Helpers;
+use Core\Url;
 use Core\View;
 use Doctrine\ORM\EntityManager;
 use App\Models\Task;
@@ -37,10 +38,31 @@ class TaskController
             $numberOfTasks = count($tasks);
             $isAdmin = Auth::isLoggedIn();
 
+            $paginationButtons = [
+                'back' => [
+                    'active' => $_GET['page'] && $_GET['page'] !== '1',
+                    'url' => Url::generate('/tasks', [
+                        'page' => $_GET['page'] > 1 ? $_GET['page'] - 1 : 1,
+                        'column' => $_GET['column'],
+                        'order' => $_GET['order'],
+                    ]),
+                ],
+                'current' => $_GET['page'] ? $_GET['page'] - 1 : 0,
+                'next' => [
+                    'active' => !$_GET['page'] || $_GET['page'] * 3 < $numberOfTasks,
+                    'url' => Url::generate('/tasks', [
+                        'page' => $_GET['page'] ? $_GET['page'] + 1 : 2,
+                        'column' => $_GET['column'],
+                        'order' => $_GET['order'],
+                    ]),
+                ],
+            ];
+
             View::show('tasks/index', array(
                 'tasks' => $tasks,
                 'isAdmin' => $isAdmin,
                 'ascOrDesc' => $data['order'] === 'ASC' ? 'DESC' : 'ASC',
+                'paginationButtons' => $paginationButtons,
                 'column' => $data['column'],
                 'numberOfTasks' => $numberOfTasks,
             ));
