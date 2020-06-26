@@ -1,0 +1,18 @@
+{
+  "name": "beejee.ershv.com",
+  "version": "1.0.0",
+  "description": "Just an app for testing PHP knowledge",
+  "private": true,
+  "scripts": {
+    "dev": "npm run development",
+    "prod": "npm run production",
+    "watch": "npm run development -- --watch",
+    "watch-poll": "npm run watch -- --watch-poll"
+  },
+  "author": "Mikhail Ershov",
+  "license": "ISC",
+  "devDependencies": {},
+  "dependencies": {
+    "bootstrap": "^4.5.0"
+  }
+}

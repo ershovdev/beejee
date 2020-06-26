@@ -1,0 +1,26 @@
+{
+    "name": "beejee/mvc",
+    "description": "Just an app for testing my PHP knowledge",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Mikhail Ershov",
+            "email": "miha@ershv.com"
+        }
+    ],
+    "require": {
+        "doctrine/orm": "^2.7",
+        "symfony/yaml": "^5.1",
+        "phroute/phroute": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\" : "core/",
+            "App\\Controllers\\" : "app/Controllers",
+            "App\\Repositories\\" : "app/Repositories",
+            "App\\Validators\\" : "app/Validators",
+            "App\\Models\\" : "app/Models",
+            "Src\\" : "src/"
+        }
+    }
+}
