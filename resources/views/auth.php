@@ -2,6 +2,6 @@
     Логин: <input type="text" name="login" />
 
     Пароль: <input type="password" name="password" />
-    <input type="submit" value="Войти" name="submit" />
+    <input type="submit" value="Sign In" name="submit" />
 </form>
 
