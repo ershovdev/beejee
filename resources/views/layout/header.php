@@ -47,14 +47,16 @@
     </div>
 </nav>
 <main class="container mt-4">
-    <?php if ($_SESSION['success']): ?>
+    <?php if (isset($_SESSION['success'])): ?>
         <div class="alert-success m-2 p-2">
             <?php echo $_SESSION['success']; ?>
             <?php $_SESSION['success'] = null; ?>
         </div>
     <?php endif; ?>
 
-    <?php foreach ($_SESSION['errors'] as $error): ?>
-        <div class="alert-danger mb-2 p-2"><?php echo $error; ?></div>
-    <?php endforeach; ?>
-    <?php $_SESSION['errors'] = null; ?>
+    <?php if (isset($_SESSION['errors'])): ?>
+        <?php foreach ($_SESSION['errors'] as $error): ?>
+            <div class="alert-danger mb-2 p-2"><?php echo $error; ?></div>
+        <?php endforeach; ?>
+        <?php $_SESSION['errors'] = null; ?>
+    <?php endif; ?>
