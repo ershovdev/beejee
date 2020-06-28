@@ -3,8 +3,6 @@
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-session_start();
-
 require_once 'vendor/autoload.php';
 
 // Initialization of the Doctrine/ORM
