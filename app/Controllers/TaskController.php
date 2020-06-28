@@ -23,10 +23,14 @@ class TaskController
 
     public function show()
     {
+        $page = $_GET['page'] ?? 1;
+        $column = $_GET['column'] ?? 'id';
+        $order = $_GET['order'] ?? 'ASC';
+
         $data = array(
-            'page' => $_GET['page'] ?? 1,
-            'column' => $_GET['column'] ?? 'id',
-            'order' => $_GET['order'] ?? 'ASC',
+            'page' => $page,
+            'column' => $column,
+            'order' => $order,
         );
 
         $validator = new TaskIndexParametersValidator($data);
@@ -34,26 +38,26 @@ class TaskController
 
         if ($result === true) {
             $task = new Task($this->entityManager);
-            $tasks = $task->getPaginator($data['page'], $data['column'], $data['order']);
+            $tasks = $task->getPaginator($page, $column, $order);
             $numberOfTasks = count($tasks);
             $isAdmin = Auth::isLoggedIn();
 
             $paginationButtons = [
                 'back' => [
-                    'active' => $_GET['page'] && $_GET['page'] !== '1',
+                    'active' => $page != 1,
                     'url' => Url::generate('/tasks', [
-                        'page' => $_GET['page'] > 1 ? $_GET['page'] - 1 : 1,
-                        'column' => $_GET['column'],
-                        'order' => $_GET['order'],
+                        'page' => $page > 1 ? $page - 1 : 1,
+                        'column' => $column,
+                        'order' => $order,
                     ]),
                 ],
-                'current' => $_GET['page'] ? $_GET['page'] - 1 : 0,
+                'current' => $page > 1 ? $page - 1 : 0,
                 'next' => [
-                    'active' => !$_GET['page'] || $_GET['page'] * 3 < $numberOfTasks,
+                    'active' => $page == 1 || $page * 3 < $numberOfTasks,
                     'url' => Url::generate('/tasks', [
-                        'page' => $_GET['page'] ? $_GET['page'] + 1 : 2,
-                        'column' => $_GET['column'],
-                        'order' => $_GET['order'],
+                        'page' => $page + 1,
+                        'column' => $column,
+                        'order' => $order,
                     ]),
                 ],
             ];
@@ -61,9 +65,9 @@ class TaskController
             View::show('tasks/index', array(
                 'tasks' => $tasks,
                 'isAdmin' => $isAdmin,
-                'ascOrDesc' => $data['order'] === 'ASC' ? 'DESC' : 'ASC',
+                'ascOrDesc' => $order === 'ASC' ? 'DESC' : 'ASC',
                 'paginationButtons' => $paginationButtons,
-                'column' => $data['column'],
+                'column' => $column,
                 'numberOfTasks' => $numberOfTasks,
             ));
         } else {
