@@ -51,18 +51,9 @@ class Auth
         }
     }
 
-    public function logout()
+    public static function isLoggedIn(?int $id, ?string $hash)
     {
-        setcookie("id", "", time() - 3600*24*30*12, "/");
-        setcookie("hash", "", time() - 3600*24*30*12, "/", null, null, true);
-
-        Helpers::redirect('/tasks');
-        exit;
-    }
-
-    public static function isLoggedIn()
-    {
-        if (isset($_COOKIE['id']) && isset($_COOKIE['hash'])) return true;
+        if (isset($id) && isset($hash)) return true;
         return false;
     }
 }

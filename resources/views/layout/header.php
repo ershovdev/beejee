@@ -30,7 +30,7 @@
                 </li>
             </ul>
             <ul class="navbar-nav">
-                <?php if (\App\Models\Auth::isLoggedIn()): ?>
+                <?php if (\App\Models\Auth::isLoggedIn($cookieId, $cookieHash)): ?>
                     <li class="nav-item active">
                         <a class="nav-link">Hi, Admin!</a>
                     </li>

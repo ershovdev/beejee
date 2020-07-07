@@ -12,13 +12,11 @@ use Core\View;
 use Doctrine\ORM\EntityManager;
 use App\Models\Task;
 
-class TaskController
+class TaskController extends Controller
 {
-    private $entityManager;
-
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager);
     }
 
     public function show()
@@ -26,7 +24,6 @@ class TaskController
         $page = $_GET['page'] ?? 1;
         $column = $_GET['column'] ?? 'id';
         $order = $_GET['order'] ?? 'ASC';
-
         $data = array(
             'page' => $page,
             'column' => $column,
@@ -39,8 +36,9 @@ class TaskController
         if ($result === true) {
             $task = new Task($this->entityManager);
             $tasks = $task->getPaginator($page, $column, $order);
+            $isAdmin = Auth::isLoggedIn($this->cookieId, $this->cookieHash);
+
             $numberOfTasks = count($tasks);
-            $isAdmin = Auth::isLoggedIn();
 
             $paginationButtons = [
                 'back' => [
@@ -62,7 +60,7 @@ class TaskController
                 ],
             ];
 
-            View::show('tasks/index', array(
+            $this->view->show('tasks/index', array(
                 'tasks' => $tasks,
                 'isAdmin' => $isAdmin,
                 'ascOrDesc' => $order === 'ASC' ? 'DESC' : 'ASC',
@@ -78,7 +76,7 @@ class TaskController
 
     public function create()
     {
-        View::show('tasks/create');
+        $this->view->show('tasks/create');
     }
 
     public function store()
@@ -107,7 +105,7 @@ class TaskController
 
     public function complete(int $id)
     {
-        if (!Auth::isLoggedIn()) {
+        if (!Auth::isLoggedIn($this->cookieId, $this->cookieHash)) {
             $_SESSION['errors'] = [0 => "You're not allowed to do that"];
             header('Location: /tasks');
             return;
@@ -127,21 +125,21 @@ class TaskController
 
     public function edit(int $id)
     {
-        if (!Auth::isLoggedIn()) {
+        if (!Auth::isLoggedIn($this->cookieId, $this->cookieHash)) {
             $_SESSION['errors'] = [0 => "You're not allowed to do that"];
             header('Location: /tasks');
             return;
         }
 
         $task = new Task($this->entityManager, $id);
-        View::show('tasks/edit', [
+        $this->view->show('tasks/edit', [
             'task' => $task->getTask(),
         ]);
     }
 
     public function update(int $id)
     {
-        if (!Auth::isLoggedIn()) {
+        if (!Auth::isLoggedIn($this->cookieId, $this->cookieHash)) {
             $_SESSION['errors'] = [0 => "You're not allowed to do that"];
             header('Location: /tasks');
             return;

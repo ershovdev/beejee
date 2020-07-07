@@ -7,18 +7,16 @@ use Core\View;
 use App\Models\Auth;
 use Doctrine\ORM\EntityManager;
 
-class AuthController
+class AuthController extends Controller
 {
-    private $entityManager;
-
     public function __construct(EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager);
     }
 
     public function show()
     {
-        View::show('auth');
+        $this->view->show('auth');
     }
 
     public function auth()
@@ -43,7 +41,10 @@ class AuthController
 
     public function logout()
     {
-        $auth = new Auth($this->entityManager);
-        $auth->logout();
+        setcookie("id", "", time() - 3600*24*30*12, "/");
+        setcookie("hash", "", time() - 3600*24*30*12, "/", null, null, true);
+
+        Helpers::redirect('/tasks');
+        exit;
     }
 }
