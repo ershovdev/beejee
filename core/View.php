@@ -19,5 +19,8 @@ class View
         require_once '../resources/views/layout/header.php';
         require_once '../resources/views/' . $view . '.php';
         require_once '../resources/views/layout/footer.php';
+
+        \Core\Helpers::setSuccess(null);
+        \Core\Helpers::setErrors(null);
     }
 }

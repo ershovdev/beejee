@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use Core\Helpers;
 use Core\View;
 use Doctrine\ORM\EntityManager;
 
@@ -17,9 +18,14 @@ class Controller
         $this->cookieId = $_COOKIE['id'] ?? null;
         $this->cookieHash = $_COOKIE['hash'] ?? null;
 
+        $errors = Helpers::getErrors();
+        $success = Helpers::getSuccess();
+
         $sharedData = [
             'cookieId' => $this->cookieId,
             'cookieHash' => $this->cookieHash,
+            'errors' => $errors,
+            'success' => $success,
         ];
 
         $this->entityManager = $entityManager;
