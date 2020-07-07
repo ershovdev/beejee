@@ -4,30 +4,23 @@ namespace App\Validators;
 
 class TaskStoreValidator
 {
-    private $data;
-
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
-
-    public function validate()
+    public static function validate(string $username, string $email, string $text)
     {
         $errors = [];
 
-        if (!$this->data['username']) {
+        if (!$username) {
             $errors['username'] = 'Empty username';
         }
 
-        if (!$this->data['email']) {
+        if (!$email) {
             $errors['email'] = 'Empty email';
         } else {
-            if (!filter_var($this->data['email'], FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Email is incorrect';
             }
         }
 
-        if (!$this->data['text']) {
+        if (!$text) {
             $errors['text'] = 'Empty text';
         }
 

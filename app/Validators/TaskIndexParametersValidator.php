@@ -6,26 +6,20 @@ namespace App\Validators;
 
 class TaskIndexParametersValidator
 {
-    private $data;
-
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
-
-    public function validate()
+    public static function validate(string $column, string $order, string $page)
     {
         $errors = [];
-        if (!in_array($this->data['column'], ['id', 'username', 'email', 'status'])) {
+
+        if (!in_array($column, ['id', 'username', 'email', 'status'])) {
             $errors['column'] = 'Wrong column';
         }
 
-        if (!in_array($this->data['order'], ['ASC', 'DESC'])) {
+        if (!in_array($order, ['ASC', 'DESC'])) {
             $errors['order'] = 'Wrong order';
         }
 
         try {
-            intval($this->data['page']);
+            intval($page);
         } catch (\Exception $e) {
             $errors['page'] = 'Page is not a number!';
         }

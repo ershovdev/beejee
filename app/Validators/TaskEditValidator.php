@@ -4,17 +4,11 @@ namespace App\Validators;
 
 class TaskEditValidator
 {
-    private $data;
-
-    public function __construct(array $data)
-    {
-        $this->data = $data;
-    }
-
-    public function validate()
+    public static function validate(string $text)
     {
         $errors = [];
-        if (!$this->data['text']) {
+
+        if (!$text) {
             $errors['text'] = 'Text is empty';
         }
 

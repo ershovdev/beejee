@@ -24,14 +24,8 @@ class TaskController extends Controller
         $page = $_GET['page'] ?? 1;
         $column = $_GET['column'] ?? 'id';
         $order = $_GET['order'] ?? 'ASC';
-        $data = array(
-            'page' => $page,
-            'column' => $column,
-            'order' => $order,
-        );
 
-        $validator = new TaskIndexParametersValidator($data);
-        $result = $validator->validate();
+        $result = TaskIndexParametersValidator::validate($column, $order, $page);
 
         if ($result === true) {
             $task = new Task($this->entityManager);
@@ -81,19 +75,16 @@ class TaskController extends Controller
 
     public function store()
     {
-        $data = array(
-            'email' => $_POST['email'],
-            'username' => htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8'),
-            'status' => 0,
-            'text' => htmlspecialchars($_POST['text'], ENT_QUOTES, 'UTF-8'),
-        );
+        $username = Helpers::escape($_POST['username']);
+        $email = $_POST['email'];
+        $text = Helpers::escape($_POST['text']);
 
-        $validator = new TaskStoreValidator($data);
-        $result = $validator->validate();
+        $result = TaskStoreValidator::validate($username, $email, $text);
+        $status = 0;
 
         if ($result === true) {
             $task = new Task($this->entityManager);
-            $task->store($data);
+            $task->store(compact('username', 'email', 'text', 'status'));
 
             $_SESSION['success'] = "Task were added successfully!";
             header('Location: /tasks');
@@ -146,15 +137,12 @@ class TaskController extends Controller
         }
 
         $task = new Task($this->entityManager, $id);
-        $data = array(
-            'text' => Helpers::escape($_POST['text']),
-        );
 
-        $validator = new TaskEditValidator($data);
-        $result = $validator->validate();
+        $text = Helpers::escape($_POST['text']);
+        $result = TaskEditValidator::validate($text);
 
         if ($result === true) {
-            $task->update($data);
+            $task->update(compact('text'));
 
             $_SESSION['success'] = "Task were added successfully!";
             header('Location: /tasks');
