@@ -8,7 +8,6 @@ use App\Validators\TaskIndexParametersValidator;
 use App\Validators\TaskStoreValidator;
 use Core\Helpers;
 use Core\Url;
-use Core\View;
 use Doctrine\ORM\EntityManager;
 use App\Models\Task;
 
@@ -80,16 +79,17 @@ class TaskController extends Controller
         $text = Helpers::escape($_POST['text']);
 
         $result = TaskStoreValidator::validate($username, $email, $text);
-        $status = 0;
 
         if ($result === true) {
+            $status = 0;
+
             $task = new Task($this->entityManager);
             $task->store(compact('username', 'email', 'text', 'status'));
 
-            $_SESSION['success'] = "Task were added successfully!";
+            Helpers::setSuccess("Task were added successfully!");
             header('Location: /tasks');
         } else {
-            $_SESSION['errors'] = $result;
+            Helpers::setErrors($result);
             header('Location: /tasks/add');
         }
     }
@@ -97,7 +97,7 @@ class TaskController extends Controller
     public function complete(int $id)
     {
         if (!Auth::isLoggedIn($this->cookieId, $this->cookieHash)) {
-            $_SESSION['errors'] = [0 => "You're not allowed to do that"];
+            Helpers::setErrors([0 => 'You\'re not allowed to do that']);
             header('Location: /tasks');
             return;
         }
@@ -106,10 +106,10 @@ class TaskController extends Controller
         $result = $task->setStatus(1);
 
         if ($result) {
-            $_SESSION['success'] = 'Task were successfully completed!';
+            Helpers::setSuccess('Task were successfully completed!');
             header('Location: /tasks');
         } else {
-            $_SESSION['errors'] = [0 => 'Something went wrong'];
+            Helpers::setErrors([0 => 'Something went wrong']);
             header('Location: /tasks');
         }
     }
@@ -117,7 +117,7 @@ class TaskController extends Controller
     public function edit(int $id)
     {
         if (!Auth::isLoggedIn($this->cookieId, $this->cookieHash)) {
-            $_SESSION['errors'] = [0 => "You're not allowed to do that"];
+            Helpers::setErrors([0 => 'You\'re not allowed to do that']);
             header('Location: /tasks');
             return;
         }
@@ -131,23 +131,23 @@ class TaskController extends Controller
     public function update(int $id)
     {
         if (!Auth::isLoggedIn($this->cookieId, $this->cookieHash)) {
-            $_SESSION['errors'] = [0 => "You're not allowed to do that"];
+            Helpers::setErrors([0 => 'You\'re not allowed to do that']);
             header('Location: /tasks');
             return;
         }
 
-        $task = new Task($this->entityManager, $id);
-
         $text = Helpers::escape($_POST['text']);
         $result = TaskEditValidator::validate($text);
+
+        $task = new Task($this->entityManager, $id);
 
         if ($result === true) {
             $task->update(compact('text'));
 
-            $_SESSION['success'] = "Task were added successfully!";
+            Helpers::setSuccess('Task were added successfully!');
             header('Location: /tasks');
         } else {
-            $_SESSION['errors'] = $result;
+            Helpers::setErrors($result);
             header("Location: /tasks/{$task->getTask()->getId()}/edit");
         }
     }
